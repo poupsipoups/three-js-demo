@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Barrio&family=Nerko+One&display=swap");
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -24,9 +26,7 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
   place-items: center;
-  min-width: 320px;
   min-height: 100vh;
 }
 
@@ -42,16 +42,77 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+.font-groovy {
+  font-family: "Nerko One", system-ui;
+  letter-spacing: 0.1em;
+}
+
+.nav-groovy-link {
+  font-family: "Nerko One", system-ui;
+  font-size: 3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: none;
+  transition: transform 0.2s, color 0.2s;
+  position: relative;
+  display: inline-block;
+  line-height: 1.1;
+  padding: 0.2em 0.1em;
+  cursor: pointer;
+  /* Pour l'effet de gradient animé */
+
+  animation: none;
+}
+
+.nav-groovy-link:hover {
+  background-image: linear-gradient(90deg, #ff6ec4, #ffa305, #81f43e, #ff6ec4);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  transform: scale(1.05) rotate(-1deg);
+  animation: gradient-move 5s linear infinite;
+}
+
+.nav-active {
+  background-image: linear-gradient(90deg, #ff6ec4, #ffa305, #81f43e, #ff6ec4);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-move 5s linear infinite !important;
+}
+
+nav {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+nav.-translate-x-full {
+  transform: translateX(-100%) !important;
+}
+nav.translate-x-0 {
+  transform: translateX(0) !important;
+}
+
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
 }
 
 @media (prefers-color-scheme: light) {
