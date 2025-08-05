@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Environment, Center } from '@react-three/drei';
+import { OrbitControls, useGLTF, Center } from '@react-three/drei';
+import * as THREE from 'three';
 
 function BlenderModel() {
   const { scene } = useGLTF('/models/weird_man.glb');
@@ -9,11 +10,24 @@ function BlenderModel() {
   console.log('Position du modèle:', scene.position);
   console.log('Scale du modèle:', scene.scale);
 
+  // Enable shadows on all children recursively
+  React.useEffect(() => {
+    const enableShadows = (object: THREE.Object3D) => {
+      if (object instanceof THREE.Mesh) {
+        object.castShadow = true;
+        object.receiveShadow = true;
+      }
+      object.children.forEach(enableShadows);
+    };
+    enableShadows(scene);
+  }, [scene]);
+
   return (
     <primitive
       object={scene}
       scale={2}
       position={[0, -1, 0]}
+      castShadow
     />
   );
 }
@@ -26,6 +40,15 @@ function Loader() {
         <meshStandardMaterial color="hotpink" />
       </mesh>
     </Center>
+  );
+}
+
+function Floor() {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]} receiveShadow>
+      <planeGeometry args={[50, 50]} />
+      <meshStandardMaterial color="#846565" />
+    </mesh>
   );
 }
 
@@ -51,15 +74,23 @@ const Scene3 = () => {
     >
       <ambientLight intensity={0.6} />
       <directionalLight
-        position={[5, 5, 5]}
-        intensity={1.2}
+        position={[-10, 10, 10]}
+        intensity={5}
+        color="white"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
       />
-      <pointLight position={[-3, 3, -3]} intensity={0.4} />
+      <pointLight position={[-3, 3, -3]} intensity={100} />
 
-      <Environment preset="studio" />
+      {/* <Environment preset="studio" /> */}
+
+      <Floor />
 
       <Center>
         <Suspense fallback={<Loader />}>
