@@ -11,63 +11,128 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🕹️ 3D Scene with React Three Fiber – Beginner's Guide
 
-```js
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+### What is Three.js?
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+**Three.js** is a JavaScript library for creating 3D graphics in the browser.  
+**React Three Fiber** is a React renderer for Three.js, making it much easier to build 3D scenes in React apps.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### 1. 3D Coordinates System
+
+```
+     Y (up)
+     ↑
+     |
+     |
+     |
+     |
+     |
+
+     +----------------------→ X (right)
+    /
+   /
+  /
+ Z (depth, into the screen)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **X**: left/right
+- **Y**: up/down
+- **Z**: depth (forward/backward)
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+### 2. What Makes a 3D Scene?
 
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+A 3D scene always has:
+
+- **A scene** (the “world”)
+- **A camera** (the point of view)
+- **Lights** (to see objects)
+- **3D objects** (models, cubes, spheres, etc.)
+
+### 3. The Canvas: Your 3D “Paper”
+
+In React Three Fiber, the `<Canvas />` component is your 3D drawing area.
+
+```jsx
+<Canvas>{/* Put your lights, objects, controls here */}</Canvas>
 ```
+
+### 4. The Camera
+
+The camera is the “eye” of the viewer.  
+You place it somewhere in space, e.g. `[3, 1.5, 3]` (a bit diagonal and above).
+
+```jsx
+<Canvas camera={{ position: [3, 1.5, 3], fov: 60, near: 0.1, far: 1000 }}>
+```
+
+- **`fov`**: field of view (like a camera lens)
+- **`near`/`far`**: min/max render distance
+
+### 5. Lights
+
+Without lights, everything would be black!
+
+- **Ambient light**: soft light everywhere
+- **Directional light**: like the sun
+- **Point light**: like a bulb
+
+```jsx
+<ambientLight intensity={0.6} />
+<directionalLight position={[5, 5, 5]} intensity={1.2} />
+<pointLight position={[-3, 3, -3]} intensity={0.4} />
+```
+
+---
+
+## Scenes Overview
+
+### **Scene 1: Animated Cube with Dynamic Lighting**
+
+- **What you see:**  
+  A rotating cube with each face colored differently, animated color changes, and interactive camera controls.
+- **Key elements:**
+  - **Box component:** A cube whose faces change color dynamically using HSL color cycling.
+  - **CameraDirectionalLight & CameraPointLight:** Lights that follow the camera, creating dynamic shadows and highlights.
+  - **OrbitControls:** Lets you rotate, zoom, and pan around the cube.
+  - **Canvas background:** Uses a CSS gradient for a modern look.
+
+**What you learn:**  
+How to animate geometry, use multiple lights, and make the camera interactive.
+
+---
+
+### **Scene 2: Interactive Particle System**
+
+- **What you see:**  
+  A 3D cloud of animated particles that move according to simple flocking rules (inspired by boids), with colored trails and boundaries.
+- **Key elements:**
+  - **BoidsParticles component:** Implements a particle system where each particle follows rules of separation, alignment, and cohesion, creating emergent flocking behavior. The system is fully interactive and updates every frame.
+  - **Custom boundaries:** Visualized with wireframe boxes, showing the space in which particles move.
+  - **OrbitControls:** Lets you explore the particle system from any angle.
+  - **Canvas background:** Black, to highlight the particles.
+
+**What you learn:**  
+How to create and animate a 3D particle system, update positions every frame, and visualize boundaries in 3D.
+
+---
+
+### **Scene 3: Importing and Displaying a Blender Model**
+
+- **What you see:**  
+  A 3D model exported from Blender (GLB format), centered in the scene, with realistic lighting and environment reflections.
+- **Key elements:**
+  - **BlenderModel component:** Loads a GLB file using `useGLTF` and displays it with `<primitive />`.
+  - **Center:** Ensures the model is centered in the view.
+  - **Environment:** Adds realistic reflections and ambient lighting.
+  - **OrbitControls:** Lets you rotate and zoom around the imported model.
+  - **Canvas background:** Gradient for a modern look.
+
+**What you learn:**  
+How to import and display complex 3D models, set up realistic lighting, and use environment maps for reflections.
+
+---
+
+**This project is a playground for learning and experimenting with 3D in React. Have fun!**
