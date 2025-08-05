@@ -99,8 +99,34 @@ Without lights, everything would be black!
   - **OrbitControls:** Lets you rotate, zoom, and pan around the cube.
   - **Canvas background:** Uses a CSS gradient for a modern look.
 
+**Animation in Three.js:**
+The animation is powered by the `useFrame` hook from React Three Fiber. This hook runs every frame (typically 60 times per second) and allows you to update object properties over time.
+
+```jsx
+// Animation des couleurs des faces du cube
+useFrame(({ clock }) => {
+  if (meshRef.current) {
+    meshRef.current.material.forEach((mat, i) => {
+      (mat as THREE.MeshStandardMaterial).color.setHSL(
+        (clock.getElapsedTime() * 0.1 + i * 0.15) % 1,
+        0.7,
+        0.5
+      );
+    });
+  }
+});
+```
+
+**How the animation works:**
+
+1. **`useFrame`**: This hook runs every frame, creating a smooth animation loop
+2. **`clock.getElapsedTime()`**: Returns the total time elapsed since the scene started (in seconds)
+3. **HSL color cycling**: Each face uses a different offset (`i * 0.15`) to create a rainbow effect
+4. **Modulo operator (`% 1`)**: Ensures the color values stay between 0 and 1
+5. **`setHSL(hue, saturation, lightness)`**: Updates the material color using HSL color space
+
 **What you learn:**  
-How to animate geometry, use multiple lights, and make the camera interactive.
+How to animate geometry using `useFrame`, cycle through colors with HSL, and make the camera interactive.
 
 ---
 
