@@ -161,4 +161,147 @@ How to import and display complex 3D models, set up realistic lighting, and use 
 
 ---
 
+---
+
+## 📚 Three.js Lexicon
+
+### Core Concepts
+
+#### **Mesh**
+
+A complete 3D object that combines geometry (shape) and material (appearance).
+
+```jsx
+<mesh>
+  <boxGeometry args={[1, 1, 1]} />
+  <meshStandardMaterial color="red" />
+</mesh>
+```
+
+- **Use case**: Solid 3D objects (cubes, spheres, imported models)
+- **Rendering**: Full surfaces with lighting, shadows, textures
+- **Performance**: Medium (depends on complexity)
+
+#### **BufferGeometry**
+
+Optimized way to store geometric data directly in GPU memory.
+
+```jsx
+<bufferGeometry>
+  <bufferAttribute
+    attach="attributes-position"
+    args={[positions, 3]}
+    itemSize={3}
+  />
+</bufferGeometry>
+```
+
+- **Use case**: High-performance geometry, particle systems
+- **Benefits**: Direct GPU access, memory efficient
+- **Data**: Stores positions, colors, normals as arrays
+
+#### **Points + PointsMaterial**
+
+Specialized rendering system for particles and point-based effects.
+
+```jsx
+<points>
+  <bufferGeometry>
+    <bufferAttribute attach="attributes-position" {...} />
+  </bufferGeometry>
+  <pointsMaterial
+    size={0.05}
+    color="white"
+    transparent={true}
+    vertexColors={true}
+  />
+</points>
+```
+
+- **Use case**: Particle effects, stars, rain, fire
+- **Performance**: Very high (thousands of particles)
+- **Rendering**: Each vertex becomes a point/sprite
+
+#### **MeshStandardMaterial**
+
+Physically-based material for realistic rendering with complex lighting.
+
+```jsx
+<meshStandardMaterial
+  color="#ff6b6b"
+  metalness={0.2}
+  roughness={0.4}
+  map={colorTexture}
+  normalMap={normalTexture}
+  emissive="#441144"
+  transparent={true}
+/>
+```
+
+- **Features**: PBR (Physically Based Rendering)
+- **Properties**: Metalness, roughness, emission, multiple texture maps
+- **Lighting**: Responds to all light types with realistic shading
+
+### Coordinate Transformations
+
+#### **localToWorld()**
+
+Converts local coordinates (relative to an object) to world coordinates (global 3D space).
+
+```jsx
+const worldPosition = camera.localToWorld(localOffset.clone());
+```
+
+- **Use case**: Position objects relative to camera/other objects
+- **Example**: Light that follows camera with fixed offset
+
+#### **position.copy()**
+
+Copies coordinates from one object to another.
+
+```jsx
+lightRef.current.position.copy(calculatedPosition);
+```
+
+#### **updateMatrixWorld()**
+
+Forces recalculation of transformation matrices after manual position changes.
+
+```jsx
+lightRef.current.target.updateMatrixWorld();
+```
+
+### Lighting System
+
+#### **DirectionalLight + Target**
+
+Light that illuminates from a position toward a target, creating parallel rays.
+
+```jsx
+<directionalLight ref={lightRef} intensity={5} castShadow />;
+{
+  /* Target must be in scene for proper calculations */
+}
+<primitive object={lightRef.current?.target} />;
+```
+
+- **Direction**: From light position to target position
+- **Shadows**: Requires target to be in scene
+- **Use case**: Sun-like lighting, follow-camera lighting
+
+### Separation of Concerns
+
+**Why BufferGeometry + Material?**
+
+- **BufferGeometry**: Defines WHERE and WHAT (positions, colors, data)
+- **Material**: Defines HOW (appearance, rendering style)
+- **Benefits**: Reusability, performance optimization, flexibility
+
+**Analogy**:
+
+- Geometry = coordinates where to draw
+- Material = paint and brush how to draw
+
+---
+
 **This project is a playground for learning and experimenting with 3D in React. Have fun!**

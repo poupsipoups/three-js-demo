@@ -6,15 +6,17 @@ export interface BoidsSettings {
   cohesionForce: number;
   maxSpeed: number;
   maxForce: number;
+  boundaryAvoidance: number;
 }
 
 export const useBoidsSettings = () => {
   const [settings, setSettings] = useState<BoidsSettings>({
-    separationForce: 0.2, // ← Encore plus faible !
-    alignmentForce: 0.1, // ← Encore plus faible !
-    cohesionForce: 0.1, // ← Encore plus faible !
-    maxSpeed: 0.1, // ← TRÈS lent !
-    maxForce: 0.005, // ← Très doux !
+    separationForce: 0.2,
+    alignmentForce: 0.1,
+    cohesionForce: 0.1,
+    maxSpeed: 0.1,
+    maxForce: 0.005,
+    boundaryAvoidance: 0.1,
   });
 
   const updateSetting = (key: keyof BoidsSettings, value: number) => {

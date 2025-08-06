@@ -4,34 +4,34 @@ import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 
 export const BasicParticles = () => {
-  // Créer les positions des particules
+  // create the positions of the particles
   const particleCount = 1000
   const positionsRef = useRef<THREE.BufferAttribute>(null)
   const circleTexture = useCircleTexture()
   const initialPositions = useMemo(() => {
-    const pos = new Float32Array(particleCount * 3) // x, y, z pour chaque particule
+    const pos = new Float32Array(particleCount * 3) // x, y, z for each particle
     
     for (let i = 0; i < particleCount; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 10     // x entre -5 et 5
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 10 // y entre -5 et 5  
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 10 // z entre -5 et 5
+      pos[i * 3] = (Math.random() - 0.5) * 10     // x between -5 and 5
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 10 // y between -5 and 5  
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 10 // z between -5 and 5
     }
     
     return pos
   }, [])
 
   const colors = useMemo(() => {
-    const cols = new Float32Array(particleCount * 3) // R, G, B pour chaque particule
+    const cols = new Float32Array(particleCount * 3) // R, G, B for each particle
     
     for (let i = 0; i < particleCount; i++) {
-      // Créer un dégradé du bleu au rouge basé sur la position Y
-      const y = initialPositions[i * 3 + 1] // position Y de cette particule
-      const normalizedY = (y + 5) / 10 // Normaliser entre 0 et 1
+      // create a gradient from blue to red based on the Y position
+      const y = initialPositions[i * 3 + 1] // position Y of this particle
+      const normalizedY = (y + 5) / 10 // normalize between 0 and 1
       
-      // Interpolation bleu vers rouge
-      cols[i * 3] = normalizedY        // Rouge : 0 en bas, 1 en haut
-      cols[i * 3 + 1] = 0.3           // Vert : constant
-      cols[i * 3 + 2] = 1 - normalizedY // Bleu : 1 en bas, 0 en haut
+      // interpolation from blue to red
+      cols[i * 3] = normalizedY        // red: 0 at the bottom, 1 at the top
+      cols[i * 3 + 1] = 0.3           // green: constant
+      cols[i * 3 + 2] = 1 - normalizedY // blue: 1 at the bottom, 0 at the top
     }
     
     return cols
@@ -43,16 +43,16 @@ export const BasicParticles = () => {
       const time = clock.getElapsedTime()
       
       for (let i = 0; i < particleCount; i++) {
-        // Position Y ondule avec le temps
+        // Position Y oscillate with the time
         const x = initialPositions[i * 3]
         const y = initialPositions[i * 3 + 1]
         const z = initialPositions[i * 3 + 2]
         
-        // Créer une vague basée sur X et le temps
+        // create a wave based on X and the time
         positions[i * 3 + 1] = y + Math.sin(time + x * 0.5) * 0.5 * z
       }
       
-      // IMPORTANT : Dire à Three.js que les positions ont changé
+      // IMPORTANT : tell Three.js that the positions have changed
       positionsRef.current.needsUpdate = true
     }
   })
@@ -60,6 +60,7 @@ export const BasicParticles = () => {
  
   return (
     <points>
+      {/* bufferGeometry is a way to store the positions and colors of the particles */}
       <bufferGeometry>
         <bufferAttribute
           ref={positionsRef}
@@ -73,6 +74,7 @@ export const BasicParticles = () => {
           itemSize={3}
         />
       </bufferGeometry>
+      {/* pointsMaterial is the material of the particles, it's the texture that will be applied to the particles */}
       <pointsMaterial 
         color="white" 
         size={0.05}

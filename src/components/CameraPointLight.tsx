@@ -9,9 +9,9 @@ export const CameraPointLight = () => {
 
   useFrame(() => {
     if (lightRef.current && sphereRef.current) {
-      // Place la lumière à une certaine distance devant la caméra
-      const offset = new THREE.Vector3(-1, 1, -1); // 2 unités devant la caméra
-      const lightPosition = camera.localToWorld(offset.clone());
+      // place light
+      const offset = new THREE.Vector3(-1, 1, -1);
+      const lightPosition = camera.localToWorld(offset.clone()); // local to world place camera as center of the relative position
       lightRef.current.position.copy(lightPosition);
 
       sphereRef.current.position.copy(lightRef.current.position);
@@ -24,10 +24,11 @@ export const CameraPointLight = () => {
         ref={lightRef}
         intensity={500}
         color="blue"
-        distance={100} // optionnel : portée de la lumière
-        decay={2}     // optionnel : atténuation
+        distance={100} // optional: range of the light
+        decay={2}     // optional: attenuation
         castShadow
       />
+      {/* sphere is a visual representation of the light */}
       <mesh ref={sphereRef}>
         <sphereGeometry args={[0.2, 32, 32]} />
         <meshStandardMaterial color="white" />

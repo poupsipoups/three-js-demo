@@ -6,7 +6,7 @@ export const Box = () => {
 
   const meshRef = useRef<THREE.Mesh<THREE.BufferGeometry, THREE.Material[]>>(null);
 
-  // Animation des couleurs des faces du cube
+  // Animation of the colors of the cube faces
   useFrame(({ clock }) => {
     if (meshRef.current) {
       meshRef.current.material.forEach((mat, i) => {
@@ -15,7 +15,7 @@ export const Box = () => {
     }
   });
 
-  // Couleurs pour chaque face du cube (6 faces)
+  // Colors for each face of the cube (6 faces)
   // const materials = [
   //   new THREE.MeshStandardMaterial({ color: '#EC5864' }), // rouge vif
   //   new THREE.MeshStandardMaterial({ color: '#606EEF' }), // bleu foncé

@@ -8,15 +8,16 @@ export const CameraDirectionalLight = () => {
 
   useFrame(() => {
     if (lightRef.current) {
-      // Place la lumière à une certaine distance devant la caméra
-      const offset = new THREE.Vector3(3, -3, -5); // 5 unités devant la caméra
-      const lightPosition = camera.localToWorld(offset.clone());
+      // place light
+      const offset = new THREE.Vector3(3, -3, -5); 
+      //lines so the light position is always at the same place relatively to the camera
+      const lightPosition = camera.localToWorld(offset.clone()); // local to world place camera as center of the relative position
       lightRef.current.position.copy(lightPosition);
 
-      // Oriente la lumière dans la même direction que la caméra
-      const targetPosition = camera.localToWorld(new THREE.Vector3(0, 0, -10));
-      lightRef.current.target.position.copy(targetPosition);
-      lightRef.current.target.updateMatrixWorld();
+      // orient light in the same direction as the camera => follows the camera pov
+      const targetPosition = camera.localToWorld(new THREE.Vector3(0, 0, -10)); //points forward of the camera
+      lightRef.current.target.position.copy(targetPosition); //target of the light
+      lightRef.current.target.updateMatrixWorld(); // as we chnaged the position manually we have to apply this to our actual context
     }
   });
 
@@ -28,7 +29,8 @@ export const CameraDirectionalLight = () => {
         color="white"
         castShadow
       />
-      {/* Le target doit être dans la scène */}
+      {/* target must be in the scene */}
+      {/* target is the point the light is pointing at, we need it so three js can calculate the light direction + the shadows */}
       {lightRef.current && (
         <primitive object={lightRef.current.target as THREE.Object3D} />
       )}
